@@ -1,4 +1,6 @@
 <launch>
-    <node pkg="camera_image" type="camera_image_pub" name="camera_image_pub1" args="0 30"/>
-    <node pkg="camera_image" type="camera_image_sub" name="camera_image_sub1"/>
+    <group cam="cam1">
+        <node pkg="camera_image" type="camera_image_pub" name="camera_image_pub1" args="0 30"/>
+        <node pkg="camera_image" type="camera_image_sub" name="camera_image_sub1"/>
+    </group>
 </launch>
