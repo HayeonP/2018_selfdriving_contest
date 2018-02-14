@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(camera_image)
+project(cal_distance)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,10 +8,6 @@ project(camera_image)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED)
-
-# add by Park
-find_package(OpenCV REQUIRED)
-
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -39,10 +35,8 @@ find_package(OpenCV REQUIRED)
 ## * In this file (CMakeLists.txt):
 ##   * add "message_generation" and every package in MSG_DEP_SET to
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
   message_generation
-  image_transport
-  cv_bridge
+  roscpp
 )
 ##   * add "message_runtime" and every package in MSG_DEP_SET to
 ##     catkin_package(CATKIN_DEPENDS ...)
@@ -52,9 +46,9 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-# )
+add_message_files(FILES
+  MsgDist.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -108,7 +102,7 @@ catkin_package(
   CATKIN_DEPENDS
   message_runtime
 #  INCLUDE_DIRS include
-#  LIBRARIES camera_image
+#  LIBRARIES cal_distance
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 )
@@ -121,15 +115,13 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
   include ${catkin_INCLUDE_DIRS}
-  #add by Park
-  include ${OpenCV_INCLUDE_DIRS}
 # include
 # ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/camera_image.cpp
+#   src/${PROJECT_NAME}/cal_distance.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -140,7 +132,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/camera_image_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/cal_distance_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -197,7 +189,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_camera_image.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_cal_distance.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
@@ -206,22 +198,10 @@ include_directories(
 # catkin_add_nosetests(test)
 
 
-add_executable(camera_image
-  src/camera_image.cpp
+add_executable(cal_distance
+  src/cal_distance.cpp
 )
-add_dependencies(camera_image ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(camera_image
+add_dependencies(cal_distance ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(cal_distance
   ${catkin_LIBRARIES}
-  # add by Park
-  ${OpenCV_LIBS}
-)
-
-add_executable(camera_image_sub
-  src/camera_image_sub.cpp
-)
-add_dependencies(camera_image_sub ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(camera_image_sub
-  ${catkin_LIBRARIES}
-  #add by Park
-  ${OpenCV_LIBS}
 )

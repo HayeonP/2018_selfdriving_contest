@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(image2cloud)
+project(convert_cloud)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -36,7 +36,14 @@ find_package(catkin REQUIRED)
 ##   * add "message_generation" and every package in MSG_DEP_SET to
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  pcl_conversions
+  pcl_ros
+  roscpp
+  sensor_msgs
+  cv_bridge
 )
+find_package( PCL REQUIRED )
+find_package(OpenCV REQUIRED)
 ##   * add "message_runtime" and every package in MSG_DEP_SET to
 ##     catkin_package(CATKIN_DEPENDS ...)
 ##   * uncomment the add_*_files sections below as needed
@@ -102,7 +109,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES image2cloud
+#  LIBRARIES convert_cloud
 #  CATKIN_DEPENDS other_catkin_pkg
 #  DEPENDS system_lib
 )
@@ -115,13 +122,15 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
   include ${catkin_INCLUDE_DIRS}
+  ${PCL_INCLUDE_DIRS}
 # include
-# ${catkin_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
+  include ${OpenCV_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/image2cloud.cpp
+#   src/${PROJECT_NAME}/convert_cloud.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -132,7 +141,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/image2cloud_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/convert_cloud_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -189,7 +198,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_image2cloud.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_convert_cloud.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
@@ -198,10 +207,11 @@ include_directories(
 # catkin_add_nosetests(test)
 
 
-add_executable(image2cloud
-  src/image2cloud.cpp
+add_executable(convert_cloud
+  src/convert_cloud.cpp
 )
-add_dependencies(image2cloud ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(image2cloud
-  ${catkin_LIBRARIES}
+add_dependencies(convert_cloud ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(convert_cloud
+    ${catkin_LIBRARIES}
+    ${OpenCV_LIBS}
 )
